@@ -34,8 +34,9 @@ async function loadCurrentTabs() {
         titleEl.textContent = title;
         url.textContent = pathname;
 
-        url.addEventListener('click', () => {
-            chrome.tabs.create({ url: tab.url });
+        url.addEventListener('click', (event) => {
+            event.preventDefault();
+            chrome.tabs.create({ url: tab.url, active: false });
         });
 
         const saved = await tabExists(tab.id);
@@ -95,9 +96,10 @@ async function loadSavedTabs() {
 
             titleEl.textContent = title;
             url.textContent = pathname;
-            url.addEventListener('click', () => {
-                chrome.tabs.create({ url: tab.url });
-            });
+            url.addEventListener('click', (event) => {
+                event.preventDefault();
+                chrome.tabs.create({ url: tab.url, active: false });
+            });    
             elements.add(element);
 
             save.innerHTML = 'Remove';
