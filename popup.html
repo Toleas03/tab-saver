@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Tab Saver</title>
+    <link rel="stylesheet" href="./popup.css" />
+</head>
+
+<body>
+    <template id="tab-template">
+        <div class="tab">
+            <div class="tab-info">
+                <h3 class="tab-title">Tab Title</h3>
+                <p class="tab-url">https://example.com</p>
+            </div>
+            <div class="tab-save-container">
+                <button class="tab-save">Save</button>
+            </div>
+        </div>
+    </template>
+
+    <div class="tabs">
+        <button id="currentTabBtn" class="tab-btn active">Current</button>
+        <button id="savedTabBtn" class="tab-btn">Saved</button>
+
+
+        <div class="search-bar">
+            <input type="text" class="search-input" placeholder="Search tabs..." />
+        </div>
+    </div>
+
+    <div class="scrollable">
+        <ul id="tab-content" class="tab-content">
+            <!-- Display the currently open tabs here -->
+        </ul>
+    </div>
+
+    <script src="./popup.js" type="module"></script>
+</body>
+
+</html>
