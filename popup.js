@@ -1,4 +1,6 @@
-const tabs = await chrome.tabs.query({});
+const allTabs = await chrome.tabs.query({});
+var tabs = allTabs;
+var keyword = '';
 
 function tabExists(tabId) {
     return new Promise((resolve, reject) => {
@@ -38,7 +40,6 @@ async function loadCurrentTabs() {
 
         const saved = await tabExists(tab.id);
 
-        console.log(saved);
         if (saved) {
             save.innerHTML = 'Saved';
             save.classList.add('saved');
@@ -50,7 +51,6 @@ async function loadCurrentTabs() {
 
         save.addEventListener('click', () => {
             if (saved) {
-                console.log('Tab already exists');
                 return;
             }
             else {
@@ -79,7 +79,11 @@ async function loadSavedTabs() {
         const elements = new Set();
         const template = document.getElementById('tab-template');
         for (const [key, tab] of Object.entries(items)) {
-            console.log(`Tab ID: ${key}, Title: ${tab.title}, URL: ${tab.url}`);
+
+            if (!tab.title.toLowerCase().includes(keyword) && !tab.url.toLowerCase().includes(keyword)) {
+                continue;
+            }
+            
             const element = template.content.firstElementChild.cloneNode(true);
 
             const title = tab.title.split('-')[0].trim();
@@ -108,8 +112,6 @@ async function loadSavedTabs() {
     });
 }
 
-loadCurrentTabs();
-
 const buttons = document.querySelectorAll('.tab-btn');
 buttons.forEach(button => {
     button.addEventListener('click', () => {
@@ -126,3 +128,29 @@ buttons.forEach(button => {
 
     });
 });
+
+const searchInput = document.querySelector('.search-input');
+
+searchInput.addEventListener('keyup', async () => {
+    const searchValue = searchInput.value.toLowerCase();
+
+    const filteredTabs = allTabs.filter(tab =>
+        tab.title.toLowerCase().includes(searchValue) ||
+        tab.url.toLowerCase().includes(searchValue)
+    );
+
+    tabs = filteredTabs;
+    keyword = searchValue;
+
+    // Check which button is currently active
+    const currentTabBtn = document.getElementById('currentTabBtn');
+    const savedTabBtn = document.getElementById('savedTabBtn');
+
+    if (currentTabBtn.classList.contains('active')) {
+        loadCurrentTabs();
+    } else if (savedTabBtn.classList.contains('active')) {
+        loadSavedTabs();
+    }
+});
+
+loadCurrentTabs();
