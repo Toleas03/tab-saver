@@ -82,6 +82,8 @@ body {
     padding: 5px 10px;
     cursor: pointer;
     border-radius: 5px;
+    min-width: 70px;
+    max-width: 70px;
 }
 
 .search-bar {
